@@ -1,0 +1,8 @@
+[11-Sep-2021 03:54:57 UTC] PHP Fatal error:  Uncaught Error: Class 'WP_Widget' not found in /home2/powerklg/foxyshopdemotwo.kodetiger.in/wp-includes/widgets/class-wp-widget-block.php:17
+Stack trace:
+#0 {main}
+  thrown in /home2/powerklg/foxyshopdemotwo.kodetiger.in/wp-includes/widgets/class-wp-widget-block.php on line 17
+[20-Sep-2021 17:17:04 UTC] PHP Fatal error:  Uncaught Error: Class 'WP_Widget' not found in /home2/powerklg/foxyshopdemotwo.kodetiger.in/wp-includes/widgets/class-wp-widget-block.php:17
+Stack trace:
+#0 {main}
+  thrown in /home2/powerklg/foxyshopdemotwo.kodetiger.in/wp-includes/widgets/class-wp-widget-block.php on line 17
