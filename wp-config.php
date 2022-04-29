@@ -21,13 +21,13 @@
 // ** MySQL settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
 //define( 'WP_MEMORY_LIMIT', '128M' );
-define( 'DB_NAME', 'powerklg_foxyshopone' );
+define( 'DB_NAME', 'foxydemo' );
 
 /** MySQL database username */
-define( 'DB_USER', 'powerklg_foxyshoponeuser' );
+define( 'DB_USER', 'root' );
 
 /** MySQL database password */
-define( 'DB_PASSWORD', 'foxydemo' );
+define( 'DB_PASSWORD', '' );
 
 /** MySQL hostname */
 define( 'DB_HOST', 'localhost' );
