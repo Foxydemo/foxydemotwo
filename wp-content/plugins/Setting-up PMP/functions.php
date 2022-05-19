@@ -1,11 +1,16 @@
 <?php 
 
-
+global $wpdb;
+// $grant_type = 'refresh_token';
+// $refresh_token = 'n36bquPRUeRwzJ7zEfcrZD1WbrMly7sDDH6SaFaK';
+// $client_id = 'client_3cevCd8ZeuSxuXPwyd3h';
+// $client_secret = 't9ImLiSVItWJaxMntpgziCPprY44uMdEBqhlQR5n';
 $grant_type = 'refresh_token';
 $refresh_token = 'vvKk3uc3lhjkyX6U1vWLqK4BJECnhwJIbUavpnKS';
 $client_id = 'client_luHCLP8quvd2byd1HstU';
 $client_secret = 'svw6fAbP7W765whGqiEui1BZmdpWDY7Uvz7mqMNQ';
-$prefix= 'wp_fdemo_';
+$prefix= $wpdb;
+
 
 // For Getting Access Token from FoxyAPI
 function get_access_token(){
@@ -174,10 +179,10 @@ function getting_transaction_Data($transaction_url){
       
     $dueDate = ($end_date - $start_date)/60/60/24;
     if($dueDate >= 0){
-        $active = "active";
+        $status = "active";
     }
     else{
-        $inactive = "inactive";
+        $status = "inactive";
     }
         $CustomerDetails = array(
             'id' => $gettingDetails->id,
@@ -202,7 +207,7 @@ function getting_transaction_Data($transaction_url){
             'total_shipping'=> $gettingDetails->total_shipping,
             'total_future_shipping'=> $gettingDetails->total_future_shipping,
             'total_order'=> $gettingDetails->total_order,
-            'status'=> $active,
+            'status'=> $status,
             'date_created'=> $gettingDetails->date_created,
             'date_modified'=> $gettingDetails->date_modified,
             'currency_code'=> $gettingDetails->currency_code,
@@ -284,7 +289,7 @@ function getting_storeId(){
 // for fetching products data from database
 function getting_products(){
         global $wpdb,$prefix;
-        $result = $wpdb->get_results ( "SELECT * FROM {$prefix}posts WHERE post_type = 'foxyshop_product'" );
+        $result = $wpdb->get_results ( "SELECT * FROM $wpdb->posts WHERE post_type = 'foxyshop_product'" );
         $id[] = '';
         $i=0;
         
@@ -325,7 +330,7 @@ function storing_products($products){
     foreach($products as $key){
        
         $name=$key[name];
-        $check = $wpdb->get_var ( "SELECT count(*) FROM {$prefix}pmpro_membership_levels WHERE name = '$name'" );
+        $check = $wpdb->get_var ( "SELECT count(*) FROM $wpdb->pmpro_membership_levels WHERE name = '$name'" );
         if($check==0){
             
             $freq=$key[_sub_frequency];
@@ -361,8 +366,11 @@ function storing_products($products){
          else{
             $code=$key[_code];
          }
-        
-       $wpdb->insert("{$prefix}pmpro_membership_levels", array(
+        // Adding Column in wp_fdemo_pmpro_membership_levels table
+        $wpdb->query("ALTER TABLE $wpdb->pmpro_membership_levels ADD code varchar(200) NOT NULL  AFTER expiration_period,ADD frequency VARCHAR(200) NOT NULL AFTER code,
+ADD start_date VARCHAR(200) NOT NULL AFTER frequency,ADD end_date VARCHAR(200) NOT NULL AFTER start_date; ");
+
+       $wpdb->insert("$wpdb->pmpro_membership_levels", array(
         'name' => $name,
         'description' => $key[desc],
         'confirmation' => 0,
@@ -740,8 +748,8 @@ function getting_payments_details($Subscription_Transaction_Item_Results){
 //Fetching the details of subscribe users data
 function subscriber_user($subscriber)
 {
-    // echo'<pre>';
-    // print_r($subscriber);
+     //echo'<pre>';
+     //print_r($subscriber);
     
     global $wpdb,$prefix;
     
@@ -752,12 +760,12 @@ function subscriber_user($subscriber)
                 
              $email = $row[customer_email];
              if($email == null){$email=0;}
-             $post_id = $wpdb->get_results("SELECT ID FROM {$prefix}users WHERE user_email ='$email'");
+             $post_id = $wpdb->get_results("SELECT ID FROM $wpdb->users WHERE user_email ='$email'");
              $Customer_ID = $post_id[0]->ID; 
              
             if($Customer_ID!=NULL){
 
-                    $check_user = $wpdb->get_var( "SELECT COUNT(*) FROM {$prefix}pmpro_memberships_users WHERE user_id ='$Customer_ID'" );
+                    $check_user = $wpdb->get_var( "SELECT COUNT(*) FROM $wpdb->pmpro_memberships_users WHERE user_id ='$Customer_ID'" );
                     //print_r($check_user);
                     if($check_user==0){
                         
@@ -827,13 +835,16 @@ function subscriber_user($subscriber)
                                         // $check=array($start_date,$end_date,$date_modified,$email,$user_first_name,$user_last_name,$source,$price,$code);
                                         // echo'<pre>';
                                         // print_r($check);
-                                $code_id = $wpdb->get_results("SELECT id FROM {$prefix}pmpro_membership_levels WHERE code ='$code'");
+                                $code_id = $wpdb->get_results("SELECT id FROM $wpdb->pmpro_membership_levels WHERE code ='$code'");
                                 // echo'<pre>';
                                 // print_r($code_id[0]->id);
                                 $newcode = $code_id[0]->id;
                                if($newcode==null){$newcode=0;}
+                                // Adding Column in wp_fdemo_pmpro_memberships_users table
+        $wpdb->query("ALTER TABLE $wpdb->pmpro_memberships_users ADD user_firstname varchar(200) NOT NULL  AFTER source,ADD user_lastname VARCHAR(200) NOT NULL AFTER user_firstname,
+ADD user_email VARCHAR(200) NOT NULL AFTER user_lastname; ");
                                 
-                                 $wpdb->insert("{$prefix}pmpro_memberships_users",array(
+                                 $wpdb->insert("$wpdb->pmpro_memberships_users",array(
                                     
                              'user_id'=>$Customer_ID,
                              'membership_id'=>$newcode,
@@ -869,17 +880,17 @@ function storing_SubscriptionPayment_details($Subscription_Details){
     foreach($Subscription_Details as $key){
         
         $email = $key[customer_email];
-        $post_id = $wpdb->get_results("SELECT ID FROM {$prefix}users WHERE user_email ='$email' ");
+        $post_id = $wpdb->get_results("SELECT ID FROM $wpdb->users WHERE user_email ='$email' ");
         $user_id= $post_id[0]->ID;
         if($user_id==null){$user_id=0;}
         $memb_name = $key[name];
-        $post_name = $wpdb->get_results("SELECT ID FROM {$prefix}pmpro_membership_levels WHERE name ='$memb_name' ");
+        $post_name = $wpdb->get_results("SELECT ID FROM $wpdb->pmpro_membership_levels WHERE name ='$memb_name' ");
         $membership_id=$post_name[0]->ID;
         $bytes = random_bytes(5);
         $random = bin2hex($bytes);
         
 
-        $check_user = $wpdb->get_var( "SELECT count(*) FROM  {$prefix}pmpro_membership_orders WHERE user_id = '$user_id' AND membership_id = '$membership_id'"  );
+        $check_user = $wpdb->get_var( "SELECT count(*) FROM  $wpdb->pmpro_membership_orders WHERE user_id = '$user_id' AND membership_id = '$membership_id'"  );
 
         if($check_user==0){
                     
@@ -915,7 +926,7 @@ function storing_SubscriptionPayment_details($Subscription_Details){
             if($type==null) { $type=0; }
             $billing_name=$key[customer_first_name].' '.$key[customer_last_name];
             
-             $wpdb->insert("{$prefix}pmpro_membership_orders", array(
+             $wpdb->insert("$wpdb->pmpro_membership_orders", array(
                 'code' => $random,
                 'session_id' => $random,
                 'user_id' => $user_id,
@@ -955,4 +966,3 @@ function storing_SubscriptionPayment_details($Subscription_Details){
     }
    
 }
-
