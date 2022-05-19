@@ -956,3 +956,19 @@ function storing_SubscriptionPayment_details($Subscription_Details){
    
 }
 
+//Subscription ending date with the current date to check the  subscription details
+
+function subscription_end_checks($Subscription_Details){
+
+    global $wpdb,$prefix;
+
+      global $wpdb,$prefix;
+    foreach($Subscription_Details as $row1){
+           $users_id = $row1[id];
+        $post_id = $wpdb->get_results("SELECT ID FROM {$prefix}pmpro_membership_levels WHERE id='$users_id' ");  
+        echo '<pre>';
+        print_r($post_id); 
+
+
+    }
+} 

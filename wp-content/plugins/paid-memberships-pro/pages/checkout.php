@@ -10,7 +10,7 @@
  * @author Paid Memberships Pro
  */
 
-global $gateway, $pmpro_review, $skip_account_fields, $pmpro_paypal_token, $wpdb, $current_user, $pmpro_msg, $pmpro_msgt, $pmpro_requirebilling, $pmpro_level, $pmpro_levels, $tospage, $pmpro_show_discount_code, $pmpro_error_fields;
+global $gateway, $pmpro_review, $skip_account_fields, $pmpro_paypal_token, $wpdb, $current_user, $pmpro_msg, $pmpro_msgt, $pmpro_requirebilling, $pmpro_subid, $pmpro_subids, $tospage, $pmpro_show_discount_code, $pmpro_error_fields;
 global $discount_code, $username, $password, $password2, $bfirstname, $blastname, $baddress1, $baddress2, $bcity, $bstate, $bzipcode, $bcountry, $bphone, $bemail, $bconfirmemail, $CardType, $AccountNumber, $ExpirationMonth,$ExpirationYear;
 
 /**
@@ -33,10 +33,10 @@ if ( empty( $default_gateway ) ) {
 
 <?php do_action('pmpro_checkout_before_form'); ?>
 
-<div id="pmpro_level-<?php echo $pmpro_level->id; ?>" class="<?php echo pmpro_get_element_class( $pmpro_checkout_gateway_class, 'pmpro_level-' . $pmpro_level->id ); ?>">
-<form id="pmpro_form" class="<?php echo pmpro_get_element_class( 'pmpro_form' ); ?>" action="<?php if(!empty($_REQUEST['review'])) echo pmpro_url("checkout", "?level=" . $pmpro_level->id); ?>" method="post">
+<div id="pmpro_subid-<?php echo $pmpro_subid->id; ?>" class="<?php echo pmpro_get_element_class( $pmpro_checkout_gateway_class, 'pmpro_subid-' . $pmpro_subid->id ); ?>">
+<form id="pmpro_form" class="<?php echo pmpro_get_element_class( 'pmpro_form' ); ?>" action="<?php if(!empty($_REQUEST['review'])) echo pmpro_url("checkout", "?subid=" . $pmpro_subid->id); ?>" method="post">
 
-	<input type="hidden" id="level" name="level" value="<?php echo esc_attr($pmpro_level->id) ?>" />
+	<input type="hidden" id="subid" name="subid" value="<?php echo esc_attr($pmpro_subid->id) ?>" />
 	<input type="hidden" id="checkjavascript" name="checkjavascript" value="1" />
 	<?php if ($discount_code && $pmpro_review) { ?>
 		<input class="<?php echo pmpro_get_element_class( 'input pmpro_alter_price', 'discount_code' ); ?>" id="discount_code" name="discount_code" type="hidden" size="20" value="<?php echo esc_attr($discount_code) ?>" />
@@ -60,35 +60,35 @@ if ( empty( $default_gateway ) ) {
 		?>
 		<div id="pmpro_pricing_fields" class="<?php echo pmpro_get_element_class( 'pmpro_checkout', 'pmpro_pricing_fields' ); ?>">
 			<h3>
-				<span class="<?php echo pmpro_get_element_class( 'pmpro_checkout-h3-name' ); ?>"><?php _e('Membership Level', 'paid-memberships-pro' );?></span>
-				<?php if(count($pmpro_levels) > 1) { ?><span class="<?php echo pmpro_get_element_class( 'pmpro_checkout-h3-msg' ); ?>"><a href="<?php echo pmpro_url("levels"); ?>"><?php _e('change', 'paid-memberships-pro' );?></a></span><?php } ?>
+				<span class="<?php echo pmpro_get_element_class( 'pmpro_checkout-h3-name' ); ?>"><?php _e('Membership subid', 'paid-memberships-pro' );?></span>
+				<?php if(count($pmpro_subids) > 1) { ?><span class="<?php echo pmpro_get_element_class( 'pmpro_checkout-h3-msg' ); ?>"><a href="<?php echo pmpro_url("subids"); ?>"><?php _e('change', 'paid-memberships-pro' );?></a></span><?php } ?>
 			</h3>
 			<div class="<?php echo pmpro_get_element_class( 'pmpro_checkout-fields' ); ?>">
 				<p>
-					<?php printf(__('You have selected the <strong>%s</strong> membership level.', 'paid-memberships-pro' ), $pmpro_level->name);?>
+					<?php printf(__('You have selected the <strong>%s</strong> membership subid.', 'paid-memberships-pro' ), $pmpro_subid->name);?>
 				</p>
 
 				<?php
 					/**
-					 * All devs to filter the level description at checkout.
+					 * All devs to filter the subid description at checkout.
 					 * We also have a function in includes/filters.php that applies the the_content filters to this description.
-					 * @param string $description The level description.
-					 * @param object $pmpro_level The PMPro Level object.
+					 * @param string $description The subid description.
+					 * @param object $pmpro_subid The PMPro subid object.
 					 */
-					$level_description = apply_filters('pmpro_level_description', $pmpro_level->description, $pmpro_level);
-					if(!empty($level_description))
-						echo $level_description;
+					$subid_description = apply_filters('pmpro_subid_description', $pmpro_subid->description, $pmpro_subid);
+					if(!empty($subid_description))
+						echo $subid_description;
 				?>
 
-				<div id="pmpro_level_cost">
+				<div id="pmpro_subid_cost">
 					<?php if($discount_code && pmpro_checkDiscountCode($discount_code)) { ?>
-						<?php printf(__('<p class="' . pmpro_get_element_class( 'pmpro_level_discount_applied' ) . '">The <strong>%s</strong> code has been applied to your order.</p>', 'paid-memberships-pro' ), $discount_code);?>
+						<?php printf(__('<p class="' . pmpro_get_element_class( 'pmpro_subid_discount_applied' ) . '">The <strong>%s</strong> code has been applied to your order.</p>', 'paid-memberships-pro' ), $discount_code);?>
 					<?php } ?>
-					<?php echo wpautop(pmpro_getLevelCost($pmpro_level)); ?>
-					<?php echo wpautop(pmpro_getLevelExpiration($pmpro_level)); ?>
+					<?php echo wpautop(pmpro_getsubidCost($pmpro_subid)); ?>
+					<?php echo wpautop(pmpro_getsubidExpiration($pmpro_subid)); ?>
 				</div>
 
-				<?php do_action("pmpro_checkout_after_level_cost"); ?>
+				<?php do_action("pmpro_checkout_after_subid_cost"); ?>
 
 				<?php if($pmpro_show_discount_code) { ?>
 					<?php if($discount_code && !$pmpro_review) { ?>
@@ -127,7 +127,7 @@ if ( empty( $default_gateway ) ) {
 		<hr />
 		<h3>
 			<span class="<?php echo pmpro_get_element_class( 'pmpro_checkout-h3-name' ); ?>"><?php _e('Account Information', 'paid-memberships-pro' );?></span>
-			<span class="<?php echo pmpro_get_element_class( 'pmpro_checkout-h3-msg' ); ?>"><?php _e('Already have an account?', 'paid-memberships-pro' );?> <a href="<?php echo wp_login_url( apply_filters( 'pmpro_checkout_login_redirect', pmpro_url("checkout", "?level=" . $pmpro_level->id . $discount_code_link) ) ); ?>"><?php _e('Log in here', 'paid-memberships-pro' );?></a></span>
+			<span class="<?php echo pmpro_get_element_class( 'pmpro_checkout-h3-msg' ); ?>"><?php _e('Already have an account?', 'paid-memberships-pro' );?> <a href="<?php echo wp_login_url( apply_filters( 'pmpro_checkout_login_redirect', pmpro_url("checkout", "?subid=" . $pmpro_subid->id . $discount_code_link) ) ); ?>"><?php _e('Log in here', 'paid-memberships-pro' );?></a></span>
 		</h3>
 		<div class="<?php echo pmpro_get_element_class( 'pmpro_checkout-fields' ); ?>">
 			<div class="<?php echo pmpro_get_element_class( 'pmpro_checkout-field pmpro_checkout-field-username', 'pmpro_checkout-field-username' ); ?>">
@@ -479,7 +479,90 @@ if ( empty( $default_gateway ) ) {
 		<?php
 		}
 	?>
+	<!-- Custom Code starts from here -->
+		<?php
+		$folder="/Kodtiger/foxydemotwo"; 
+		require_once($_SERVER['DOCUMENT_ROOT'] . $folder . '/wp-config.php');
+		require_once($_SERVER['DOCUMENT_ROOT'] . $folder . '/wp-load.php');
+		global $wpdb;
+		
+		$level=''; 
+		if(isset($_GET['level'])){
+			$level = $_GET['level']; 
+		} 
+		$sub_details = $wpdb->get_results("SELECT * FROM wp_fdemo_pmpro_membership_orders WHERE id = '$level'");
+    if(!empty($sub_details)){
+    $subid = $sub_details[0];
+    $id= $sub_details[0]->id;
+    $code=$sub_details[0]->code;
+    $session_id=$sub_details[0]->session_id;
+    $user_id= $sub_details[0]->user_id;
+    $membership_id= $sub_details[0]->membership_id;
+    $paypal_token= $sub_details[0]->paypal_token;
+    $billing_name= $sub_details[0]->billing_name;
+    $billing_state= $sub_details[0]->billing_state;
+    $billing_city= $sub_details[0]->billing_city;
+    $billing_zip= $sub_details[0]->billing_zip;
+    $billing_country= $sub_details[0]->billing_country;
+    $billing_phone= $sub_details[0]->billing_phone;
+    $subtotal= $sub_details[0]->subtotal;
+    $tax= $sub_details[0]->tax;
+    $couponamount= $sub_details[0]->couponamount;
+    $checkout_id= $sub_details[0]->checkout_id;
+    $certificate_id= $sub_details[0]->certificate_id;
+    $certificateamount= $sub_details[0]->certificateamount;
+    $expirationmonth= $sub_details[0]->expirationmonth;
+    $expirationyear= $sub_details[0]->expirationyear;
+    $gateway= $sub_details[0]->gateway;
+    $gateway_environment= $sub_details[0]->gateway_environment;
+    $payment_transaction_id= $sub_details[0]->payment_transaction_id;
+    $subscription_transaction_id= $sub_details[0]->subscription_transaction_id;
+    $timestamp= $sub_details[0]->timestamp;
+    $affiliate_id= $sub_details[0]->affiliate_id;
+    $affiliate_subid= $sub_details[0]->affiliate_subid;
+    $notes= $sub_details[0]->notes;
+    }
+}
+		?>
+		<!-- http://localhost/Kodtiger/foxydemotwo/membership-account/membership-checkout/
+		https://foxydemo.foxycart.com/cart -->
+		<form action="https://foxydemo.foxycart.com/cart" method="post" accept-charset="utf-8" class="foxyshop_subscription" id="foxyshop_subscription_form_<?php echo $code; ?>" rel="<?php echo $code; ?>">
+        <input type="hidden" name="id" id="id" value="179">
+        <input type="hidden" name="price" id="code<?php echo $code; ?>" value="<?php echo $code; ?>"/>
+        <input type="hidden" name="session_id" id="session_id<?php echo $code; ?>" value="<?php echo $session_id; ?>" />
+        <input type="hidden" name="membership_id" value="94" id="membership_id<?php echo $code; ?>"> 
+        <input type="hidden" name="paypal_token" value="NIL<?php echo $code; ?>">
+        <input type="hidden" name="billing_name" value="Muklesh Kumar" id="billing_name<?php echo $code; ?>">
+        <input type="hidden" name="billing_street" value="Soukya road near sunfeast buiscuit factory Bngalore" id="billing_street<?php echo $code; ?>">
+        <input type="hidden" name="billing_city" value="Bangalore East" id="billing_city<?php echo $code; ?>">
+        <input type="hidden" name="billing_state" value="Karnataka" id="billing_state<?php echo $code; ?>">
+        <input type="hidden" name="billing_zip" value="560067" id="billing_zip<?php echo $code; ?>">
+        <input type="hidden" name="billing_country" value="IN" id="billing_country<?php echo $code; ?>">
+        <input type="hidden" name="billing_phone" value="+917903554671" id="billing_phone<?php echo $code; ?>">
+        <input type="hidden" name="subtotal" value="200" id="subtotal<?php echo $code; ?>">
+        <input type="hidden" name="tax" value="0" id="tax<?php echo $code; ?>">
+        <input type="hidden" name="couponamount" value="NIL" id="couponamount<?php echo $code; ?>">
+        <input type="hidden" name="checkout_id" value="1938724489" id="checkout_id<?php echo $code; ?>">
+        <input type="hidden" name="certificate_id" value="0" id="certificate_id<?php echo $code; ?>">
+        <input type="hidden" name="certificateamount" value="NIL" id="certificateamount<?php echo $code; ?>">
+        <input type="hidden" name="total" value="200" id="total<?php echo $code; ?>">
+        <input type="hidden" name="payment_type" value="plastic" id="payment_type<?php echo $code; ?>">
+        <input type="hidden" name="card_type" value="Visa" id="card_type<?php echo $code; ?>">
+        <input type="hidden" name="accountnumber" value="xxxxxxxxxxxx1111" id="accountnumber<?php echo $code; ?>">
+        <input type="hidden" name="expirationmonth" value="10" id="expirationmonth<?php echo $code; ?>">
+        <input type="hidden" name="expirationyear" value="2022" id="expirationyear<?php echo $code; ?>">
+        <input type="hidden" name="status" value="cancelled" id="status<?php echo $code; ?>">
+        <input type="hidden" name="gateway" value="NIL" id="gateway<?php echo $code; ?>">
+        <input type="hidden" name="gateway_environment" value="sandbox" id="gateway<?php echo $code; ?>">
+        <input type="hidden" name="subscription_transaction_id" value="TEST23909E37C" id="subscription_transaction_id<?php echo $code; ?>">
 
+        <input type="hidden" name="timestamp" value="2022-04-22 15:03:26" id="timestamp<?php echo $code; ?>">
+        <input type="hidden" name="affiliate_id" value="NIL" id="affiliate_id<?php echo $code; ?>">
+        <input type="hidden" name="affiliate_subid" value="NIL" id="affiliate_subid<?php echo $code; ?>">
+        <input type="hidden" name="notes" value="NIL" id="<?php echo $code; ?>">
+		</form>
+
+	<!-- Custom Code ends here -->
 	<?php do_action("pmpro_checkout_after_tos_fields"); ?>
 
 	<div class="<?php echo pmpro_get_element_class( 'pmpro_checkout-field pmpro_captcha', 'pmpro_captcha' ); ?>">
@@ -530,16 +613,81 @@ if ( empty( $default_gateway ) ) {
 			?>
 
 		<?php } ?>
+		<!-- Custom Code starts from here -->
 
+		
+		
+		<!-- Custom code ends here  -->
 		<span id="pmpro_processing_message" style="visibility: hidden;">
 			<?php
 				$processing_message = apply_filters("pmpro_processing_message", __("Processing...", 'paid-memberships-pro' ));
 				echo $processing_message;
 			?>
 		</span>
+
 	</div>
 </form>
 
 <?php do_action('pmpro_checkout_after_form'); ?>
 
-</div> <!-- end pmpro_level-ID -->
+</div> <!-- end pmpro_subid-ID -->
+<!-- Customization code  starts from here -->
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+ 
+
+	$("document").ready(function(){
+		var level = $(this).attr('id');
+		var mess = $(this).attr('data-name');
+		$.ajax({
+                    url:"<?php echo plugin_dir_url( __FILE__ ) ?>function.php",
+                    method: "POST",
+                    data: {action:mess, lev:level},
+                    success: function (data){
+						alert(data);
+						var subdetails = $.parseJSON(data);
+						$('#id').val(subdetails.id);
+                        $('#code').val(subdetails.code);
+                        $('#session_id').val(subdetails.session_id);
+                        $('#user_id').val(subdetails.user_id);
+                        $('#membership_id').val(subdetails.membership_id);
+                        $('#paypal_token').val(subdeytails.paypal_token);
+                        $('#billing_name').val(subdetails.billing_name);
+                        $('#billing_street').val(subdetails.billing_street);
+                        $('#billing_city').val(subdetails.billing_city);
+                        $('#billing_state').val(subdetails.billing_state);
+                        $('#billing_zip').val(subdetails.billing_zip);
+                        $('#billing_country').val(subfetails.billing_country);
+                        $('#billing_phone').val(subdetails.billing_phone);
+                        $('#subtotal').val(subdetails.subtotal);
+                        $('#tax').val(subdetails.tax);
+                        $('#couponamount').val(subdetails.couponamount);
+                        $('#checkout_id').val(subdetails.checkout_id);
+                        $('#certificate_id').val(subdetails.certificate_id);
+                        $('#certificate_amount').val(subdetails.certificate_amount);
+                        $('#total').val(subdetails.total);
+                        $('#payment_type').val(subdetails.payment_type);
+                        $('#card_type').val(subdetails.card_type);
+                        $('#accountnumber').val(subdetails.accountnumber);
+                        $('#expirationmonth').val(subdetails.expirationmonth);
+                        $('#expirationyear').val(subdetails.expirationyear);
+                        $('#status').val(subdetails.status);
+                        $('#gateway').val(subdetails.gateway);
+                        $('#gateway_environment').val(subdetails.gateway_environment);
+                        $('#payment_transaction_id').val(subdetails.payment_transaction_id);
+                        $('#timestamp').val(subdetails.timestamp);
+                        $('#subscription_transaction_id').val(subdetails.subscription_transaction_id);
+                        $('#affiliate_id').val(subdetails.affiliate_id);
+                        $('#affiliate_subid').val(subdetails.affilliate_subid);
+                        $('#notes').val(subdetails.notes);
+						
+                    }
+                });
+	});
+
+
+
+</script>
+<!-- Custom code ends here  -->
