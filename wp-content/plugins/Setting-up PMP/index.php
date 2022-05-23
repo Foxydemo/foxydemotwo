@@ -34,6 +34,28 @@ if(!defined('ABSPATH')){
      }
      
   }
+    function my_handler_transfer_products() {
+   
+    $uriFound = strpos($_SERVER["REQUEST_URI"], "transfer_products.php");
+   
+     if($uriFound !== false) {
+  
+        include strtok(strstr($_SERVER["REQUEST_URI"], "transfer_products.php"), "?");
+        exit();  
+     }
+     
+  }
+      function my_handler_transfer_user_details() {
+   
+    $uriFound = strpos($_SERVER["REQUEST_URI"], "transfer_users.php");
+   
+     if($uriFound !== false) {
+  
+        include strtok(strstr($_SERVER["REQUEST_URI"], "transfer_users.php"), "?");
+        exit();  
+     }
+     
+  }
   $current_store_URL = getting_store_Url();
   function migrating_users_products(){
       global $current_store_URL;
@@ -54,10 +76,20 @@ if(!defined('ABSPATH')){
         $fetching_items = getting_items_details($fetching_transaction); //fetching all items details
         $fetching_payment = getting_payments_details($fetching_items); //fetching all paymentzs details
         
-        $storing_SubscriptionPayment = storing_SubscriptionPayment_details($fetching_payment); // storing all subscription and payment details
         $Subscriber_details= subscriber_user($fetching_payment); //adding subscriber details to user table.
+        $storing_SubscriptionPayment = storing_SubscriptionPayment_details($fetching_payment); // storing all subscription and payment details
+        
+if($storing_SubscriptionPayment){
+           echo "Payment Status Stored";
+        }
+        if($Subscriber_details){
+         echo "Subscription Details Stored";
+      }
+
   }
   
   add_action('parse_request', 'my_handler');
+   add_action('parse_request', 'my_handler_transfer_products');
+   add_action('parse_request', 'my_handler_transfer_user_details');
   add_shortcode("get_detail","migrating_users_products");
   add_shortcode("get_details","migrating_all_details");

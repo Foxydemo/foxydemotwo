@@ -148,7 +148,7 @@
           
         $dueDate = ($end_date - $start_date)/60/60/24;
         if($dueDate == 0){
-        $inactive = "inactive";
+        $active = "inactive";
         }
         else{
             $active = "active";
@@ -181,14 +181,14 @@ ADD user_email VARCHAR(200) NOT NULL AFTER user_lastname; ");
       
     //$parse_email = json_encode($getting_transaction_details);
     
-    $myfile = fopen("data.txt", 'a') or die("Unable to open file!");
-    // $txt = $billing_country;
-    $txt = $errormsg;
-    fwrite($myfile, $txt);
+    // $myfile = fopen("data.txt", 'a') or die("Unable to open file!");
+    // // $txt = $billing_country;
+    // $txt = $data;
+    // fwrite($myfile, $txt);
 
-    $txt1 = $billing_phone;
-    fwrite($myfile, $txt1);
+    // $txt1 = $billing_phone;
+    // fwrite($myfile, $txt1);
     
     
-    fclose($myfile);
+    // fclose($myfile);
 ?>
