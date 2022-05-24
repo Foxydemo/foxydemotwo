@@ -1,3 +1,4 @@
+
 <?php
 /**
  * Template: Checkout
@@ -528,10 +529,8 @@ if ( empty( $default_gateway ) ) {
 		}
 	
 		?>
-
-		<form action="https://foxydemo.foxycart.com/cart" method="post" accept-charset="utf-8" class="foxyshop_product" id="foxyshop_product_form_<?php echo $code; ?>" rel="<?php echo $code; ?>">
-        <input type="hidden" name="fcsid" value="brenm3nsefjk4hfd75ujcplab1">
-        <input type="hidden" name="price" id="fs_price_<?php echo $code; ?>" value="<?php echo $billing_amount; ?>"/>
+		<form action="https://foxydemo.foxycart.com/cart" class="foxycart" method="post">
+	 <input type="hidden" name="price" id="fs_price_<?php echo $code; ?>" value="<?php echo $billing_amount; ?>"/>
         <input type="hidden" name="x:originalprice" id="originalprice_<?php echo $code; ?>" value="<?php echo $billing_amount; ?>" />
         <input type="hidden" name="x:l18n" value="$|.|,|1|0" id="foxyshop_l18n_<?php echo $code; ?>"> 
         <input type="hidden" name="image" value="https://foxyshopdemotwo.kodetiger.in/wp-content/uploads/2022/03/51PpSVije-L-150x150.jpg" id="foxyshop_cart_product_image_<?php echo $code; ?>">
@@ -545,7 +544,8 @@ if ( empty( $default_gateway ) ) {
         <input type="hidden" name="weight" id="fs_weight_<?php echo $code; ?>" value="1.0">
         <input type="hidden" name="sub_startdate" id="fs_sub_startdate_<?php echo $code; ?>" value="<?php echo $start_date; ?>" />
         <input type="hidden" name="sub_enddate" id="fs_sub_enddate_<?php echo $code; ?>" value="<?php echo $end_date; ?>" />
-		</form>
+	<input type="submit" value="Buy It Now!" />
+</form>
 
 	<!-- Custom Code ends here -->
 	<?php do_action("pmpro_checkout_after_tos_fields"); ?>
