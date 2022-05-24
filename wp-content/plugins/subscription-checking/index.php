@@ -23,6 +23,13 @@ if(!defined('ABSPATH')){
   define("PLUGIN_DIR_PATH", plugin_dir_path(__FILE__));
   define("PLUGIN_URL", plugins_url());
 
-add_shortcode('Subscription_check','Subscription_checking');
+function Subscription_Details(){
+  $dates_time = Subscription_checking();
+  $check = check_subscriptionDate($dates_time);
+  
+  
+}
+
+add_shortcode('Subscription_check','Subscription_Details');
 
   
