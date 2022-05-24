@@ -1,3 +1,4 @@
+
 <?php
 /**
  * Template: Checkout
@@ -493,6 +494,79 @@ if ( empty( $default_gateway ) ) {
 		}
 	?>
 
+	<!-- Custom Code starts from here -->
+		<?php
+		$folder="/foxydemotwo";
+		require_once($_SERVER['DOCUMENT_ROOT'] . $folder . '/wp-config.php');
+		require_once($_SERVER['DOCUMENT_ROOT'] . $folder . '/wp-load.php');
+		global $wpdb;
+		
+		$level=''; 
+		if(isset($_GET['level'])){
+			$level = $_GET['level']; 
+		} 
+		$level_details = $wpdb->get_results("SELECT * FROM wp_fdemo_pmpro_membership_levels WHERE id = '$level'");
+		if(!empty($level_details)){
+		$levels = $level_details[0];
+		$id= $level_details[0]->id;
+		$name= $level_details[0]->name;
+		$description= $level_details[0]->description;
+		$confirmation= $level_details[0]->confirmation;
+		$initial_payment= $level_details[0]->initial_payment;
+		$billing_amount= $level_details[0]->billing_amount;
+		$cycle_number= $level_details[0]->cycle_number;
+		$cycle_period= $level_details[0]->cycle_period;
+		$billing_limit= $level_details[0]->billing_limit;
+		$trial_amount= $level_details[0]->trial_amount;
+		$trial_limit= $level_details[0]->trial_limit;
+		$allow_signups= $level_details[0]->allow_signups;
+		$expiration_number= $level_details[0]->expiration_number;
+		$expiration_period= $level_details[0]->expiration_period;
+		$code= $level_details[0]->code;
+		$frequency= $level_details[0]->frequency;
+		$start_date= $level_details[0]->start_date;
+		$end_date= $level_details[0]->end_date;
+		}
+	
+		?>
+
+		<form action="https://foxydemo.foxycart.com/cart" method="post" accept-charset="utf-8" class="foxyshop_product" id="foxyshop_product_form_<?php echo $code; ?>" rel="<?php echo $code; ?>">
+        <input type="hidden" name="fcsid" value="brenm3nsefjk4hfd75ujcplab1">
+        <input type="hidden" name="price" id="fs_price_<?php echo $code; ?>" value="<?php echo $billing_amount; ?>"/>
+        <input type="hidden" name="x:originalprice" id="originalprice_<?php echo $code; ?>" value="<?php echo $billing_amount; ?>" />
+        <input type="hidden" name="x:l18n" value="$|.|,|1|0" id="foxyshop_l18n_<?php echo $code; ?>"> 
+        <input type="hidden" name="image" value="https://foxyshopdemotwo.kodetiger.in/wp-content/uploads/2022/03/51PpSVije-L-150x150.jpg" id="foxyshop_cart_product_image_<?php echo $code; ?>">
+        <input type="hidden" name="url" value="https://foxyshopdemotwo.kodetiger.in/products/laddu/" id="fs_url_<?php echo $code; ?>">
+        <input type="hidden" name="quantity_min" value="0" id="fs_quantity_min_<?php echo $code; ?>">
+        <input type="hidden" name="quantity_max" value="0" id="fs_quantity_max_<?php echo $code; ?>">
+        <input type="hidden" name="x:quantity_max" value="0" id="original_quantity_max_<?php echo $code; ?>">
+        <input type="hidden" name="sub_frequency" id="fs_sub_frequency_<?php echo $code; ?>" value="<?php echo $frequency; ?>" />
+        <input type="hidden" name="name" id="fs_name_<?php echo $code; ?>" value="<?php echo $name; ?>" />
+        <input type="hidden" name="code" id="fs_code_<?php echo $code; ?>" value="<?php echo $code; ?>"/>
+        <input type="hidden" name="weight" id="fs_weight_<?php echo $code; ?>" value="1.0">
+        <input type="hidden" name="sub_startdate" id="fs_sub_startdate_<?php echo $code; ?>" value="<?php echo $start_date; ?>" />
+        <input type="hidden" name="sub_enddate" id="fs_sub_enddate_<?php echo $code; ?>" value="<?php echo $end_date; ?>" />
+		<button type="submit" name="x:productsubmit" class="productsubmit foxyshop_button">Add To Cart</button>
+		</form>
+		<form action="https://foxydemo.foxycart.com/cart" class="foxycart" method="post">
+	 <input type="hidden" name="price" id="fs_price_<?php echo $code; ?>" value="<?php echo $billing_amount; ?>"/>
+        <input type="hidden" name="x:originalprice" id="originalprice_<?php echo $code; ?>" value="<?php echo $billing_amount; ?>" />
+        <input type="hidden" name="x:l18n" value="$|.|,|1|0" id="foxyshop_l18n_<?php echo $code; ?>"> 
+        <input type="hidden" name="image" value="https://foxyshopdemotwo.kodetiger.in/wp-content/uploads/2022/03/51PpSVije-L-150x150.jpg" id="foxyshop_cart_product_image_<?php echo $code; ?>">
+        <input type="hidden" name="url" value="https://foxyshopdemotwo.kodetiger.in/products/laddu/" id="fs_url_<?php echo $code; ?>">
+        <input type="hidden" name="quantity_min" value="0" id="fs_quantity_min_<?php echo $code; ?>">
+        <input type="hidden" name="quantity_max" value="0" id="fs_quantity_max_<?php echo $code; ?>">
+        <input type="hidden" name="x:quantity_max" value="0" id="original_quantity_max_<?php echo $code; ?>">
+        <input type="hidden" name="sub_frequency" id="fs_sub_frequency_<?php echo $code; ?>" value="<?php echo $frequency; ?>" />
+        <input type="hidden" name="name" id="fs_name_<?php echo $code; ?>" value="<?php echo $name; ?>" />
+        <input type="hidden" name="code" id="fs_code_<?php echo $code; ?>" value="<?php echo $code; ?>"/>
+        <input type="hidden" name="weight" id="fs_weight_<?php echo $code; ?>" value="1.0">
+        <input type="hidden" name="sub_startdate" id="fs_sub_startdate_<?php echo $code; ?>" value="<?php echo $start_date; ?>" />
+        <input type="hidden" name="sub_enddate" id="fs_sub_enddate_<?php echo $code; ?>" value="<?php echo $end_date; ?>" />
+	<input type="submit" value="Buy It Now!" />
+</form>
+
+	<!-- Custom Code ends here -->
 	<?php do_action("pmpro_checkout_after_tos_fields"); ?>
 
 	<div class="<?php echo pmpro_get_element_class( 'pmpro_checkout-field pmpro_captcha', 'pmpro_captcha' ); ?>">
@@ -543,7 +617,6 @@ if ( empty( $default_gateway ) ) {
 			?>
 
 		<?php } ?>
-
 		<span id="pmpro_processing_message" style="visibility: hidden;">
 			<?php
 				$processing_message = apply_filters("pmpro_processing_message", __("Processing...", 'paid-memberships-pro' ));
