@@ -26,8 +26,7 @@ if(!defined('ABSPATH')){
 function Subscription_Details(){
   $dates_time = Subscription_checking();
   $check = check_subscriptionDate($dates_time);
-  
-  
+  $role =  user_role_change($check);
 }
 
 add_shortcode('Subscription_check','Subscription_Details');

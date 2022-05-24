@@ -21,7 +21,7 @@
 // ** MySQL settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
 //define( 'WP_MEMORY_LIMIT', '128M' );
-define( 'DB_NAME', 'foxydemo' );
+define( 'DB_NAME', 'foxydemotwo' );
 
 /** MySQL database username */
 define( 'DB_USER', 'root' );

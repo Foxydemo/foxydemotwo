@@ -14,6 +14,7 @@ function Subscription_checking()
 		return($subscription_details);
 }
 
+// To check subscription enddate and display remaining days for active users and displays 0 for expired members.
 function check_subscriptionDate($check){
 
 	for($i=0;$i<count($check);$i++){
@@ -44,6 +45,26 @@ function check_subscriptionDate($check){
 		}
    	}
 	   return $checking;
+}
+
+// Changing user role to none for expired subscription members.
+function user_role_change($check){
+
+	for($i=0;$i<count($check);$i++){
+
+		$split= (explode("|",$check[$i]));
+		$id = $split[0];
+		$expired = $split[1];
+		if($expired==0){
+			
+			$user_id = $id;
+			$role = 'none';
+			$user_id = wp_update_user( [ 
+				'ID'       => $user_id, 
+				'role' => $role
+			] );
+		}
+	}
 }
 ?>
 
