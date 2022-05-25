@@ -14,6 +14,7 @@ $prefix= $wpdb;
 
 // For Getting Access Token from FoxyAPI
 function get_access_token(){
+    try{
         global $grant_type,$refresh_token,$client_id,$client_secret;
         $ch = curl_init();
         $curlConfig = array(
@@ -32,12 +33,17 @@ function get_access_token(){
         curl_close($ch);
         $parseResult = json_decode($result);
         $access_Token = $parseResult->access_token;
+    }catch (Exception $e)
+    {
+        echo"access token is not generated";
+    }
         return $access_Token;
+    }
          
-}
 
 // For getting store url from mother FoxyAPI
 function getting_store_Url(){
+    try{
         $accessToken=get_access_token();
         $url = "https://api.foxycart.com";
 
@@ -60,7 +66,13 @@ function getting_store_Url(){
         $store = "fx:store";
         $store_fx = $storeDetails->$store;
         $store_link = $store_fx->href;
+    }catch(Exception $e)
+    {
+            echo"store url is not generated";
+    }
         return $store_link;
+    }
+    }
       
 }
 //for getting subscription url
