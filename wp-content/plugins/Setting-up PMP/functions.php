@@ -65,6 +65,7 @@ function getting_store_Url(){
 }
 //for getting subscription url
 function getting_subscription_Url($current_store_URL){
+    try{
         global $wpdb,$prefix;
         $accessToken=get_access_token();
             
@@ -120,15 +121,19 @@ function getting_subscription_Url($current_store_URL){
             $Transaction_CustomerDetails[] = getting_transaction_Data($transaction_url);
             $Transaction_URL = getting_transaction_Url($transaction_url);
             $Items_URL[] = getting_items ($Transaction_URL);
-            //STORE THE SUBSCRIPTION CUSTOMER DETAILS INTO THE PMP DATABASE
-            
-        }   
+            //STORE THE SUBSCRIPTION CUSTOMER DETAILS INTO THE PMP DATABASE  
+        }
+    }
+    catch(Exception $e){
+        //echo $e->errorMessage();
+        echo "Store URL not generated from Foxy API response.";
+    }
 }
 
 // for getting transaction URl along with customer details.
 function getting_transaction_Url($transaction_url){
+    try{
         $accessToken=get_access_token();
-        
         $curl = curl_init($transaction_url);
         curl_setopt($curl, CURLOPT_URL, $transaction_url);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -148,15 +153,17 @@ function getting_transaction_Url($transaction_url){
         $gettingDetails =$parse_Resp->_embedded->$tran_url[0];
         $item="fx:items";
         $item_url = $gettingDetails->_links->$item->href;
-        
         return $item_url;
-       
-        
+    }
+    catch(Exception $e){
+        //echo $e->errorMessage();
+        echo "Transaction URL not generated from Foxy API response.";
+    }         
 }
 //to store the details of the customer per transaction
 function getting_transaction_Data($transaction_url){
+    try{
         $accessToken=get_access_token();
-        
         $curl = curl_init($transaction_url);
         curl_setopt($curl, CURLOPT_URL, $transaction_url);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -175,15 +182,15 @@ function getting_transaction_Data($transaction_url){
         $tran_url = "fx:transactions";
         $gettingDetails =$parse_Resp->_embedded->$tran_url[0];
         $start_date = strtotime($getting_items_start_date);
-    $end_date = strtotime($getting_subscription_end_date);
-      
-    $dueDate = ($end_date - $start_date)/60/60/24;
-    if($dueDate >= 0){
-        $status = "active";
-    }
-    else{
-        $status = "inactive";
-    }
+        $end_date = strtotime($getting_subscription_end_date);
+        
+        $dueDate = ($end_date - $start_date)/60/60/24;
+        if($dueDate >= 0){
+            $status = "active";
+        }
+        else{
+            $status = "inactive";
+        }
         $CustomerDetails = array(
             'id' => $gettingDetails->id,
             'display_id'=> $gettingDetails->display_id,
@@ -215,14 +222,19 @@ function getting_transaction_Data($transaction_url){
         );
         $item="fx:items";
         $item_url = $gettingDetails->_links->$item->href;
- 
         return $CustomerDetails;
+    }
+    catch(Exception $e){
+        //echo $e->errorMessage();
+        echo "Transaction URL not generated from Foxy API response.";
+    }
         
 }
 
 
 // for getting items url and also to display items as to what customer have purchased.
 function getting_items($item_url){
+    try{
         $accessToken=get_access_token();
         $curl = curl_init($item_url);
         curl_setopt($curl, CURLOPT_URL, $item_url);
@@ -272,8 +284,12 @@ function getting_items($item_url){
             'date_modified'=> $itemUrl->date_modified,
             'currency_symbol'=> $itemUrl->currency_symbol
         );
-
         return $ItemsDetails;
+    }
+    catch(Exception $e){
+        //echo $e->errorMessage();
+        echo "Item URL not generated from Foxy API response.";
+    }
 }
 
 // getting store Id from storeUrl
@@ -288,6 +304,7 @@ function getting_storeId(){
 
 // for fetching products data from database
 function getting_products(){
+    try{
         global $wpdb,$prefix;
         $result = $wpdb->get_results ( "SELECT * FROM $wpdb->posts WHERE post_type = 'foxyshop_product'" );
         $id[] = '';
@@ -317,14 +334,19 @@ function getting_products(){
                 '_saleprice' => $value[_saleprice][0],
                 '_foxyshop_menu_order_3' => $value[_foxyshop_menu_order_3][0],
                 );
-        $i++; 
-        }
-        
-    return $products; 
+            $i++; 
+            }
+        return $products; 
+    }
+    catch(Exception $e){
+        //echo $e->errorMessage();
+        echo "Products are not generated from database.";
+    }
 }
 
 //to store all the foxy products in PMP database.
 function storing_products($products){
+    try{
     global $wpdb,$prefix;
   
     foreach($products as $key){
@@ -368,7 +390,7 @@ function storing_products($products){
          }
         // Adding Column in wp_fdemo_pmpro_membership_levels table
         $wpdb->query("ALTER TABLE $wpdb->pmpro_membership_levels ADD code varchar(200) NOT NULL  AFTER expiration_period,ADD frequency VARCHAR(200) NOT NULL AFTER code,
-ADD start_date VARCHAR(200) NOT NULL AFTER frequency,ADD end_date VARCHAR(200) NOT NULL AFTER start_date; ");
+        ADD start_date VARCHAR(200) NOT NULL AFTER frequency,ADD end_date VARCHAR(200) NOT NULL AFTER start_date; ");
 
        $wpdb->insert("$wpdb->pmpro_membership_levels", array(
         'name' => $name,
@@ -392,7 +414,12 @@ ADD start_date VARCHAR(200) NOT NULL AFTER frequency,ADD end_date VARCHAR(200) N
         
         }
         
-    } 
+    }
+    }
+    catch(Exception $e){
+        //echo $e->errorMessage();
+        echo "Products are not generated or product insert query failed.";
+    }
 }
 
 
@@ -436,6 +463,7 @@ function hypermedia(){
 
 //Fetching all details from Subscription API
 function fetching_subscription_details($current_store_URL){
+    try{
     
     $accessToken=get_access_token();
     $Store_URL = $current_store_URL;
@@ -557,9 +585,15 @@ function fetching_subscription_details($current_store_URL){
 
     return $Subscription_Details;
 }
+catch(Exception $e){
+    //echo $e->errorMessage();
+    echo "Store URL not generated from Foxy API response.";
+}
+}
 
 //fetching transaction_customer_details from API
 function fetching_transaction_customer_details($Subscription_Details){
+    try{
 
     $accessToken=get_access_token();
     $i=0;
@@ -624,10 +658,16 @@ function fetching_transaction_customer_details($Subscription_Details){
                     $Subscription_Transaction_Results[$key] = $val + $val2; // combine 'em
                     }
         return $Subscription_Transaction_Results;
+    }
+    catch(Exception $e){
+        //echo $e->errorMessage();
+        echo "Subscription Details are not generated from Foxy API response.";
+    }
 }
 
 //fetching itenms for particular transaction from API above.
 function getting_items_details($Subscription_Transaction_Results){
+    try{
     
     $accessToken=get_access_token();
     $i=0;
@@ -690,10 +730,16 @@ function getting_items_details($Subscription_Transaction_Results){
                     }
 
         return $Subscription_Transaction_Item_Results;
+    }
+    catch(Exception $e){
+        //echo $e->errorMessage();
+        echo "Transaction Details not generated from Foxy API response.";
+    }
 }
 
 //fetching payment details from the above API
 function getting_payments_details($Subscription_Transaction_Item_Results){
+    try{
     
     $accessToken=get_access_token();
     $i=0;
@@ -743,6 +789,11 @@ function getting_payments_details($Subscription_Transaction_Item_Results){
                     $Subscription_Transaction_Item_Payment_Results[$key] = $val + $val2; // combine 'em
                     }
         return $Subscription_Transaction_Item_Payment_Results;    
+    }
+    catch(Exception $e){
+        //echo $e->errorMessage();
+        echo "Item Details are not generated from Foxy API response.";
+    }
 }
 
 //Fetching the details of subscribe users data
@@ -876,6 +927,7 @@ ADD user_email VARCHAR(200) NOT NULL AFTER user_lastname; ");
 
 //function to store subscriptions details from foxy to PMP database
 function storing_SubscriptionPayment_details($Subscription_Details){
+    try{
     global $wpdb,$prefix;
     foreach($Subscription_Details as $key){
         
@@ -964,5 +1016,9 @@ function storing_SubscriptionPayment_details($Subscription_Details){
         }
         
     }
-   
+    }
+    catch(Exception $e){
+        //echo $e->errorMessage();
+        echo "Subscription Details are not generated from Foxy API response.";
+    }
 }
