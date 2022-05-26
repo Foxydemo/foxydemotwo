@@ -25,8 +25,12 @@ if(!defined('ABSPATH')){
 
 function Subscription_Details(){
   $dates_time = Subscription_checking();
+  echo '<pre>';
   $check = check_subscriptionDate($dates_time);
+  
   $role =  user_role_change($check);
+  $check_expiry=send_subscription_mail($check);
+  print_r($check_expiry);
 }
 
 add_shortcode('Subscription_check','Subscription_Details');

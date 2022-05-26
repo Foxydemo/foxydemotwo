@@ -66,5 +66,50 @@ function user_role_change($check){
 		}
 	}
 }
-?>
 
+function send_subscription_mail($check){
+
+		for($i=0;$i<count($check);$i++){
+			$split= (explode("|",$check[$i]));
+			$user_id=$split[0];
+			$remaining_days=$split[1];
+			// echo $user_id;
+			// echo $last_date;
+			
+			if($remaining_days>0 && $remaining_days<=10){
+				$id=$user_id;
+				//echo $id;
+				
+				global $wpdb;
+				$get_users= $wpdb->get_results("SELECT * FROM $wpdb->pmpro_memberships_users WHERE user_id= $id");
+				//print_r($get_users);
+						 foreach($get_users as $get_user){
+						 	$id=$get_user->user_id;
+						 	 $email=$get_user->user_email;
+						 	 $ufname=$get_user->user_firstname;
+						 	 $ulname=$get_user->user_lastname;
+						 	 // echo $user_id;
+						 	 // echo $email;
+						 	 $fullname= $ufname.' '.$ulname.' ';
+						 	 $subject="Your Subscription is going to end in".$remaining_days."days";
+						 	$message="Dear ".$fullname.", Your Subscription is going to end in".$remaining_days."days. To continue enjoying our services please subscribe within the due date. <br/>";
+						 	   $header = "From:admin@solari.com \r\n";
+         $header .= "MIME-Version: 1.0\r\n";
+         $header .= "Content-type: text/html\r\n";
+                  
+                  try{
+                  mail($email,$subject,$message,$header);
+                  	// echo "Mail sent";
+                  }
+                  catch(Exception $e){
+                  	echo "Mail not sent".$e->getMessage();
+                  }
+
+}	
+		
+				}
+
+			}
+
+		}
+?>
