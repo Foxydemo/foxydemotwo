@@ -72,9 +72,7 @@ function getting_store_Url(){
     }
         return $store_link;
     }
-    }
-      
-}
+    
 //for getting subscription url
 function getting_subscription_Url($current_store_URL){
     try{
