@@ -14,16 +14,3 @@
 # </IfModule>
 
 # # END WordPress   
-
-# BEGIN WordPress
-
-<IfModule mod_rewrite.c>
-RewriteEngine On
-RewriteBase /foxydemotwo/
-RewriteRule ^index\.php$ - [L]
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule . /foxydemotwo/index.php [L]
-</IfModule>
-
-# END WordPress
