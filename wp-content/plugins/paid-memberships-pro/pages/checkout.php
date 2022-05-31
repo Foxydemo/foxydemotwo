@@ -496,9 +496,9 @@ if ( empty( $default_gateway ) ) {
 
 	<!-- Custom Code starts from here -->
 		<?php
-		$folder="/foxydemotwo";
-		require_once($_SERVER['DOCUMENT_ROOT'] . $folder . '/wp-config.php');
-		require_once($_SERVER['DOCUMENT_ROOT'] . $folder . '/wp-load.php');
+		
+		require_once($_SERVER['DOCUMENT_ROOT'] .  '/wp-config.php');
+		require_once($_SERVER['DOCUMENT_ROOT'] . '/wp-load.php');
 		global $wpdb;
 		
 		$level=''; 
