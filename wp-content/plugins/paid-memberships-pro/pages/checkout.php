@@ -613,7 +613,7 @@ if ( empty( $default_gateway ) ) {
 // 		require_once($_SERVER['DOCUMENT_ROOT'] . $folder . '/wp-load.php');
         //define( 'ROOT_DIR', dirname(__FILE__) );
 // 		require_once( ROOT_DIR.'../../../../wp-config.php' );
-        include '../../../../wp-config.php';
+        require_once($_SERVER['DOCUMENT_ROOT'] . '/wp-config.php');
 		global $wpdb;
 		
 		$level=''; 
