@@ -70,6 +70,9 @@
     
     $bytes = random_bytes(5);
     $random = bin2hex($bytes);
+    if($billing_phone == NULL){
+        $billing_phone = "0";
+    }
     
     // getting the user Id from wordpress user
         global $wpdb;
