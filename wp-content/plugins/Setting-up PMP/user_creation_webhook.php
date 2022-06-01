@@ -106,7 +106,8 @@
         'gateway_environment' => $payment_gateway_type,
         'payment_transaction_id' => $payment_transaction_id,
         'subscription_transaction_id' => $payment_transaction_id,
-         ),array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s','%s' ));
+        'timestamp' => date("Y-m-d")." ".date("h:i:sa"),
+         ),array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s','%s','%s' ));
          
         // $errormsg = $wpdb->last_error; 
     
