@@ -169,7 +169,7 @@ ADD user_email VARCHAR(200) NOT NULL AFTER user_lastname; ");
         'cycle_period' => $cp,
         'status' => $active,
         'startdate' => $getting_subscription_start_date,
-        'enddate' => $getting_subscription_end_date,
+        'enddate' => $getting_subscription_next_transaction_date,
         'modified' => $getting_subscription_date_modified,
         'source' => $source,
         'user_firstname' => $getting_transaction_firstName,
