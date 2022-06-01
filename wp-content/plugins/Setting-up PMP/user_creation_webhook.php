@@ -107,7 +107,7 @@
         'gateway_environment' => $payment_gateway_type,
         'payment_transaction_id' => $payment_transaction_id,
         'subscription_transaction_id' => $payment_transaction_id,
-        'timestamp' => $current_date
+        'timestamp' => date('Y-m-d H:i:s', time())
          ));
         // $errormsg = $wpdb->last_error; 
     
