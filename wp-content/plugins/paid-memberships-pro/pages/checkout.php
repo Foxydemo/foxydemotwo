@@ -251,10 +251,10 @@ if ( empty( $default_gateway ) ) {
 				if($pmpro_checkout_default_submit_button)
 				{
 				?>
-				<span id="pmpro_submit_span">
+				<!-- <span id="pmpro_submit_span">
 					<input type="hidden" name="submit-checkout" value="1" />
 					<input type="submit"  id="pmpro_btn-submit" class="<?php echo pmpro_get_element_class(  'pmpro_btn pmpro_btn-submit-checkout', 'pmpro_btn-submit-checkout' ); ?>" value="<?php if($pmpro_requirebilling) { _e('Submit and Check Out', 'paid-memberships-pro' ); } else { _e('Submit and Confirm', 'paid-memberships-pro' );}?> &raquo;" />
-				</span>
+				</span> -->
 				<?php
 				}
 			?>
