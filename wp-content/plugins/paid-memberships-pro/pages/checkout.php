@@ -117,60 +117,60 @@ if ( empty( $default_gateway ) ) {
 	?>
 	<div id="pmpro_user_fields" class="<?php echo pmpro_get_element_class( 'pmpro_checkout', 'pmpro_user_fields' ); ?>">
 		<hr />
-		<h3>
-			<span class="<?php echo pmpro_get_element_class( 'pmpro_checkout-h3-name' ); ?>"><?php esc_html_e('Account Information', 'paid-memberships-pro' );?></span>
-			<span class="<?php echo pmpro_get_element_class( 'pmpro_checkout-h3-msg' ); ?>"><?php esc_html_e('Already have an account?', 'paid-memberships-pro' );?> <a href="<?php echo wp_login_url( apply_filters( 'pmpro_checkout_login_redirect', pmpro_url("checkout", "?level=" . $pmpro_level->id . $discount_code_link) ) ); ?>"><?php esc_html_e('Log in here', 'paid-memberships-pro' );?></a></span>
-		</h3>
-		<div class="<?php echo pmpro_get_element_class( 'pmpro_checkout-fields' ); ?>">
-			<div class="<?php echo pmpro_get_element_class( 'pmpro_checkout-field pmpro_checkout-field-username', 'pmpro_checkout-field-username' ); ?>">
-				<label for="username"><?php esc_html_e('Username', 'paid-memberships-pro' );?></label>
-				<input id="username" name="username" type="text" class="<?php echo pmpro_get_element_class( 'input', 'username' ); ?>" size="30" value="<?php echo esc_attr($username); ?>" />
-			</div> <!-- end pmpro_checkout-field-username -->
+		<!-- <h3>
+			<span class="<?php //echo pmpro_get_element_class( 'pmpro_checkout-h3-name' ); ?>"><?php //esc_html_e('Account Information', 'paid-memberships-pro' );?></span>
+			<span class="<?php //echo pmpro_get_element_class( 'pmpro_checkout-h3-msg' ); ?>"><?php //esc_html_e('Already have an account?', 'paid-memberships-pro' );?> <a href="<?php //echo wp_login_url( apply_filters( 'pmpro_checkout_login_redirect', pmpro_url("checkout", "?level=" . $pmpro_level->id . $discount_code_link) ) ); ?>"><?php //esc_html_e('Log in here', 'paid-memberships-pro' );?></a></span>
+		</h3> -->
+		<!-- <div class="<?php //echo pmpro_get_element_class( 'pmpro_checkout-fields' ); ?>"> -->
+			<!-- <div class="<?php //echo pmpro_get_element_class( 'pmpro_checkout-field pmpro_checkout-field-username', 'pmpro_checkout-field-username' ); ?>">
+				<label for="username"><?php //esc_html_e('Username', 'paid-memberships-pro' );?></label>
+				<input id="username" name="username" type="text" class="<?php //echo pmpro_get_element_class( 'input', 'username' ); ?>" size="30" value="<?php //echo esc_attr($username); ?>" />
+			</div> end pmpro_checkout-field-username -->
 
 			<?php
-				do_action('pmpro_checkout_after_username');
+				//do_action('pmpro_checkout_after_username');
 			?>
 
-			<div class="<?php echo pmpro_get_element_class( 'pmpro_checkout-field pmpro_checkout-field-password', 'pmpro_checkout-field-password' ); ?>">
-				<label for="password"><?php esc_html_e('Password', 'paid-memberships-pro' );?></label>
-				<input id="password" name="password" type="password" class="<?php echo pmpro_get_element_class( 'input', 'password' ); ?>" size="30" value="<?php echo esc_attr($password); ?>" />
-			</div> <!-- end pmpro_checkout-field-password -->
+			<!-- <div class="<?php //echo pmpro_get_element_class( 'pmpro_checkout-field pmpro_checkout-field-password', 'pmpro_checkout-field-password' ); ?>">
+				<label for="password"><?php //esc_html_e('Password', 'paid-memberships-pro' );?></label>
+				<input id="password" name="password" type="password" class="<?php //echo pmpro_get_element_class( 'input', 'password' ); ?>" size="30" value="<?php echo //esc_attr($password); ?>" /> -->
+			<!-- </div> end pmpro_checkout-field-password -->
 
 			<?php
-				$pmpro_checkout_confirm_password = apply_filters("pmpro_checkout_confirm_password", true);
-				if($pmpro_checkout_confirm_password) { ?>
-					<div class="<?php echo pmpro_get_element_class( 'pmpro_checkout-field pmpro_checkout-field-password2', 'pmpro_checkout-field-password2' ); ?>">
-						<label for="password2"><?php esc_html_e('Confirm Password', 'paid-memberships-pro' );?></label>
-						<input id="password2" name="password2" type="password" class="<?php echo pmpro_get_element_class( 'input', 'password2' ); ?>" size="30" value="<?php echo esc_attr($password2); ?>" />
-					</div> <!-- end pmpro_checkout-field-password2 -->
-				<?php } else { ?>
-					<input type="hidden" name="password2_copy" value="1" />
-				<?php }
-			?>
-
-			<?php
-				do_action('pmpro_checkout_after_password');
-			?>
-
-			<div class="<?php echo pmpro_get_element_class( 'pmpro_checkout-field pmpro_checkout-field-bemail', 'pmpro_checkout-field-bemail' ); ?>">
-				<label for="bemail"><?php esc_html_e('Email Address', 'paid-memberships-pro' );?></label>
-				<input id="bemail" name="bemail" type="<?php echo ($pmpro_email_field_type ? 'email' : 'text'); ?>" class="<?php echo pmpro_get_element_class( 'input', 'bemail' ); ?>" size="30" value="<?php echo esc_attr($bemail); ?>" />
-			</div> <!-- end pmpro_checkout-field-bemail -->
-
-			<?php
-				$pmpro_checkout_confirm_email = apply_filters("pmpro_checkout_confirm_email", true);
-				if($pmpro_checkout_confirm_email) { ?>
-					<div class="<?php echo pmpro_get_element_class( 'pmpro_checkout-field pmpro_checkout-field-bconfirmemail', 'pmpro_checkout-field-bconfirmemail' ); ?>">
-						<label for="bconfirmemail"><?php esc_html_e('Confirm Email Address', 'paid-memberships-pro' );?></label>
-						<input id="bconfirmemail" name="bconfirmemail" type="<?php echo ($pmpro_email_field_type ? 'email' : 'text'); ?>" class="<?php echo pmpro_get_element_class( 'input', 'bconfirmemail' ); ?>" size="30" value="<?php echo esc_attr($bconfirmemail); ?>" />
-					</div> <!-- end pmpro_checkout-field-bconfirmemail -->
-				<?php } else { ?>
-					<input type="hidden" name="bconfirmemail_copy" value="1" />
-				<?php }
+				// $pmpro_checkout_confirm_password = apply_filters("pmpro_checkout_confirm_password", true);
+				// if($pmpro_checkout_confirm_password) { ?>
+					<!-- <div class="<?php //echo pmpro_get_element_class( 'pmpro_checkout-field pmpro_checkout-field-password2', 'pmpro_checkout-field-password2' ); ?>">
+						<label for="password2"><?php //esc_html_e('Confirm Password', 'paid-memberships-pro' );?></label>
+						<input id="password2" name="password2" type="password" class="<?php//echo pmpro_get_element_class( 'input', 'password2' ); ?>" size="30" value="<?php// echo esc_attr($password2); ?>" />
+					</div> end pmpro_checkout-field-password2 -->
+				<?php //} else { ?>
+					<!-- <input type="hidden" name="password2_copy" value="1" /> -->
+				<?php //}
 			?>
 
 			<?php
-				do_action('pmpro_checkout_after_email');
+				//do_action('pmpro_checkout_after_password');
+			?>
+
+			<!-- <div class="<?php //echo pmpro_get_element_class( 'pmpro_checkout-field pmpro_checkout-field-bemail', 'pmpro_checkout-field-bemail' ); ?>">
+				<label for="bemail"><?php //esc_html_e('Email Address', 'paid-memberships-pro' );?></label>
+				<input id="bemail" name="bemail" type="<?php //echo ($pmpro_email_field_type ? 'email' : 'text'); ?>" class="<?php //echo pmpro_get_element_class( 'input', 'bemail' ); ?>" size="30" value="<?php //echo esc_attr($bemail); ?>" />
+			</div> end pmpro_checkout-field-bemail -->
+
+			<?php
+				// $pmpro_checkout_confirm_email = apply_filters("pmpro_checkout_confirm_email", true);
+				// if($pmpro_checkout_confirm_email) { ?>
+					<!-- <div class="<?php //echo pmpro_get_element_class( 'pmpro_checkout-field pmpro_checkout-field-bconfirmemail', 'pmpro_checkout-field-bconfirmemail' ); ?>">
+						<label for="bconfirmemail"><?php //esc_html_e('Confirm Email Address', 'paid-memberships-pro' );?></label>
+						<input id="bconfirmemail" name="bconfirmemail" type="<?php //echo ($pmpro_email_field_type ? 'email' : 'text'); ?>" class="<?php //echo pmpro_get_element_class( 'input', 'bconfirmemail' ); ?>" size="30" value="<?php //echo esc_attr($bconfirmemail); ?>" />
+					</div> end pmpro_checkout-field-bconfirmemail -->
+				<?php //} else { ?>
+					<!-- <input type="hidden" name="bconfirmemail_copy" value="1" /> -->
+				<?php// }
+			?>
+
+			<?php
+				//do_action('pmpro_checkout_after_email');
 			?>
 
 			<div class="<?php echo pmpro_get_element_class( 'pmpro_hidden' ); ?>">
