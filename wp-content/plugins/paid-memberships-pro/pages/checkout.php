@@ -133,7 +133,7 @@ if ( empty( $default_gateway ) ) {
 
 			<!-- <div class="<?php //echo pmpro_get_element_class( 'pmpro_checkout-field pmpro_checkout-field-password', 'pmpro_checkout-field-password' ); ?>">
 				<label for="password"><?php //esc_html_e('Password', 'paid-memberships-pro' );?></label>
-				<input id="password" name="password" type="password" class="<?php //echo pmpro_get_element_class( 'input', 'password' ); ?>" size="30" value="<?php echo //esc_attr($password); ?>" /> -->
+				<input id="password" name="password" type="password" class="<?php //echo pmpro_get_element_class( 'input', 'password' ); ?>" size="30" value="<?php //echo esc_attr($password); ?>" /> -->
 			<!-- </div> end pmpro_checkout-field-password -->
 
 			<?php
