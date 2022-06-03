@@ -116,7 +116,7 @@ if ( empty( $default_gateway ) ) {
 		$discount_code_link = !empty( $discount_code) ? '&discount_code=' . $discount_code : ''; 
 	?>
 	<div id="pmpro_user_fields" class="<?php echo pmpro_get_element_class( 'pmpro_checkout', 'pmpro_user_fields' ); ?>">
-		<hr />
+		<!-- <hr /> -->
 		<!-- <h3>
 			<span class="<?php //echo pmpro_get_element_class( 'pmpro_checkout-h3-name' ); ?>"><?php //esc_html_e('Account Information', 'paid-memberships-pro' );?></span>
 			<span class="<?php //echo pmpro_get_element_class( 'pmpro_checkout-h3-msg' ); ?>"><?php //esc_html_e('Already have an account?', 'paid-memberships-pro' );?> <a href="<?php //echo wp_login_url( apply_filters( 'pmpro_checkout_login_redirect', pmpro_url("checkout", "?level=" . $pmpro_level->id . $discount_code_link) ) ); ?>"><?php //esc_html_e('Log in here', 'paid-memberships-pro' );?></a></span>
@@ -141,7 +141,7 @@ if ( empty( $default_gateway ) ) {
 				// if($pmpro_checkout_confirm_password) { ?>
 					<!-- <div class="<?php //echo pmpro_get_element_class( 'pmpro_checkout-field pmpro_checkout-field-password2', 'pmpro_checkout-field-password2' ); ?>">
 						<label for="password2"><?php //esc_html_e('Confirm Password', 'paid-memberships-pro' );?></label>
-						<input id="password2" name="password2" type="password" class="<?php//echo pmpro_get_element_class( 'input', 'password2' ); ?>" size="30" value="<?php// echo esc_attr($password2); ?>" />
+						<input id="password2" name="password2" type="password" class="<?php //echo pmpro_get_element_class( 'input', 'password2' ); ?>" size="30" value="<?php// echo esc_attr($password2); ?>" />
 					</div> end pmpro_checkout-field-password2 -->
 				<?php //} else { ?>
 					<!-- <input type="hidden" name="password2_copy" value="1" /> -->
