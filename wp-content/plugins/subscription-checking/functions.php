@@ -49,20 +49,29 @@ function check_subscriptionDate($check){
 
 // Changing user role to none for expired subscription members.
 function user_role_change($check){
-
+	global $wpdb;
 	for($i=0;$i<count($check);$i++){
-
 		$split= (explode("|",$check[$i]));
 		$id = $split[0];
 		$expired = $split[1];
 		if($expired==0){
-			
+			if($id!=1){ //to avoid the change in user role to admin.
 			$user_id = $id;
 			$role = 'none';
 			$user_id = wp_update_user( [ 
 				'ID'       => $user_id, 
 				'role' => $role
 			] );
+			// echo"<pre>";
+			// echo $user_id."<br>";
+			
+			foreach($user_id as $userid){
+				$blockuser = get_field( 'block_user',$userid);
+				echo $blockuser;
+			}
+
+			
+			}
 		}
 	}
 }
