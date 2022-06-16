@@ -70,6 +70,9 @@
     
     $bytes = random_bytes(5);
     $random = bin2hex($bytes);
+    if($billing_phone == NULL){
+        $billing_phone = "0";
+    }
     
     // getting the user Id from wordpress user
         global $wpdb;
@@ -77,7 +80,8 @@
         
          $membership_id = $wpdb->get_results("SELECT id FROM wp_fdemo_pmpro_membership_levels WHERE code ='$getting_items_code'");
         $new_membership_id = $membership_id[0]->id;
-        
+        date_default_timezone_set('Asia/Kolkata');
+		$current_date = date('Y-m-d H:i:s', time());
      //for insert the all data in PMP order table name wp_fdemo_pmpro_membership_orders
       global $wpdb;
         $wpdb->insert('wp_fdemo_pmpro_membership_orders', array(
@@ -106,8 +110,8 @@
         'gateway_environment' => $payment_gateway_type,
         'payment_transaction_id' => $payment_transaction_id,
         'subscription_transaction_id' => $payment_transaction_id,
-         ),array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s','%s' ));
-         
+        'timestamp' => date('Y-m-d H:i:s', time())
+         ));
         // $errormsg = $wpdb->last_error; 
     
     
@@ -169,7 +173,7 @@ ADD user_email VARCHAR(200) NOT NULL AFTER user_lastname; ");
         'cycle_period' => $cp,
         'status' => $active,
         'startdate' => $getting_subscription_start_date,
-        'enddate' => $getting_subscription_end_date,
+        'enddate' => $getting_subscription_next_transaction_date,
         'modified' => $getting_subscription_date_modified,
         'source' => $source,
         'user_firstname' => $getting_transaction_firstName,

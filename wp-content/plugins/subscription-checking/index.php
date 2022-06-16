@@ -13,7 +13,20 @@ License: GPLv2 or later
 Text Domain: Subscription-checking
 */ 
 // Exit if accessed directly
-include 'functions.php';
+include 'function.php';
+
+
+function subscription_check_cron() {
+   
+  $uriFound = strpos($_SERVER["REQUEST_URI"], "subscription_check.php");
+ 
+   if($uriFound !== false) {
+
+      include strtok(strstr($_SERVER["REQUEST_URI"], "subscription_check.php"), "?");
+      exit();  
+   }
+   
+}
 
 
 if(!defined('ABSPATH')){
@@ -32,6 +45,7 @@ function Subscription_Details(){
   
 }
 
-add_shortcode('Subscription_check','Subscription_Details');
+add_action('parse_request', 'subscription_check_cron');
+add_shortcode('subscription_check','Subscription_Details');
 
   
