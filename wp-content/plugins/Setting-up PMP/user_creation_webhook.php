@@ -83,35 +83,49 @@
         date_default_timezone_set('Asia/Kolkata');
 		$current_date = date('Y-m-d H:i:s', time());
      //for insert the all data in PMP order table name wp_fdemo_pmpro_membership_orders
+    try {
       global $wpdb;
         $wpdb->insert('wp_fdemo_pmpro_membership_orders', array(
-        'code' => $random,
-        'session_id' => $random,
-        'user_id' => $result[0]->ID,
-        'membership_id' => $new_membership_id,
-        'billing_name' => $fullname, 
-        'billing_street' => $address,
-        'billing_city' => $billing_city,
-        'billing_zip' => $billing_zip,
-        'billing_country' => $billing_country,
-        'billing_phone' => $billing_phone,
-        'subtotal' => $getting_items_price,
-        'tax' => $tax,
-        'checkout_id' => $transcation_id,
-        'certificate_id' => $transcation_id,
-        'total' => $getting_items_price,
-        'payment_type' => $payment_type,
-        'cardtype' => $payment_card_type,
-        'accountnumber' => $payment_card_number,
-        'expirationmonth' => $payment_cc_exp_month,
-        'expirationyear' => $payment_cc_exp_year,
-        'status' => $payment_status,
-        'gateway' => $payment_gateway_type,
-        'gateway_environment' => $payment_gateway_type,
-        'payment_transaction_id' => $payment_transaction_id,
-        'subscription_transaction_id' => $payment_transaction_id,
-        'timestamp' => date('Y-m-d H:i:s', time())
-         ));
+            'code' => $random,
+            'session_id' => $random,
+            'user_id' => $result[0]->ID,
+            'membership_id' => $new_membership_id,
+            'billing_name' => $fullname, 
+            'billing_street' => $address,
+            'billing_city' => $billing_city,
+            'billing_zip' => $billing_zip,
+            'billing_country' => $billing_country,
+            'billing_phone' => $billing_phone,
+            'subtotal' => $getting_items_price,
+            'tax' => $tax,
+            'checkout_id' => $transcation_id,
+            'certificate_id' => $transcation_id,
+            'total' => $getting_items_price,
+            'payment_type' => $payment_type,
+            'cardtype' => $payment_card_type,
+            'accountnumber' => $payment_card_number,
+            'expirationmonth' => $payment_cc_exp_month,
+            'expirationyear' => $payment_cc_exp_year,
+            'status' => $payment_status,
+            'gateway' => $payment_gateway_type,
+            'gateway_environment' => $payment_gateway_type,
+            'payment_transaction_id' => $payment_transaction_id,
+            'subscription_transaction_id' => $payment_transaction_id,
+            'timestamp' => date('Y-m-d H:i:s', time())
+        ));
+    }
+    catch (MySQLDuplicateKeyException $e) {
+        // duplicate entry exception
+        $e->getMessage();
+    }
+    catch (MySQLException $e) {
+        // other mysql exception (not duplicate key entry)
+        $e->getMessage();
+    }
+    catch (Exception $e) {
+        // not a MySQL exception
+        $e->getMessage();
+    }
         // $errormsg = $wpdb->last_error; 
     
     
@@ -137,16 +151,24 @@
             }
     
     // for user create in wordpress
-     wp_insert_user( array(
-                    'user_login' => $getting_transaction_email,
-                    'first_name' => $getting_transaction_firstName,
-                    'last_name' => $getting_transaction_lastName,
-                    'user_pass' => $getting_transaction_password,
-                    'user_email' => $getting_transaction_email,
-                    'display_name' => $getting_transaction_firstName. ' ' .$getting_transaction_lastName,
-                    'role' => apply_filters('foxyshop_default_user_role', 'subscriber'),
-                )); 
-        
+    try {
+            wp_insert_user( array(
+                            'user_login' => $getting_transaction_email,
+                            'first_name' => $getting_transaction_firstName,
+                            'last_name' => $getting_transaction_lastName,
+                            'user_pass' => $getting_transaction_password,
+                            'user_email' => $getting_transaction_email,
+                            'display_name' => $getting_transaction_firstName. ' ' .$getting_transaction_lastName,
+                            'role' => apply_filters('foxyshop_default_user_role', 'subscriber'),
+                        )); 
+        }
+        catch (PDOException $e) {
+            echo "DataBase Error: The user could not be added.<br>".$e->getMessage();
+        } 
+        catch (Exception $e) {
+            echo "General Error: The user could not be added.<br>".$e->getMessage();
+        }
+
          $start_date = strtotime($getting_subscription_start_date);
         $end_date = strtotime($getting_subscription_end_date);
           
@@ -159,10 +181,25 @@
         }
         
         // Adding Column in wp_fdemo_pmpro_memberships_users table
+        try {
         $wpdb->query("ALTER TABLE wp_fdemo_pmpro_memberships_users ADD user_firstname varchar(200) NOT NULL  AFTER source,ADD user_lastname VARCHAR(200) NOT NULL AFTER user_firstname,
 ADD user_email VARCHAR(200) NOT NULL AFTER user_lastname; ");
+        }
+        catch (MySQLDuplicateKeyException $e) {
+            // duplicate entry exception
+            $e->getMessage();
+        }
+        catch (MySQLException $e) {
+            // other mysql exception (not duplicate key entry)
+            $e->getMessage();
+        }
+        catch (Exception $e) {
+            // not a MySQL exception
+            $e->getMessage();
+        }
        
         // for insert the user_Id in PMP wp_fdemo_pmpro_memberships_users
+    try {
         $wpdb->insert('wp_fdemo_pmpro_memberships_users', array(
         'user_id' => $result[0]->ID,
         'membership_id' => $new_membership_id,
@@ -180,6 +217,19 @@ ADD user_email VARCHAR(200) NOT NULL AFTER user_lastname; ");
         'user_lastname' => $getting_transaction_lastName,
         'user_email' => $getting_transaction_email,
          ));
+    }
+    catch (MySQLDuplicateKeyException $e) {
+        // duplicate entry exception
+        $e->getMessage();
+    }
+    catch (MySQLException $e) {
+        // other mysql exception (not duplicate key entry)
+        $e->getMessage();
+    }
+    catch (Exception $e) {
+        // not a MySQL exception
+        $e->getMessage();
+    }
          
          
       
