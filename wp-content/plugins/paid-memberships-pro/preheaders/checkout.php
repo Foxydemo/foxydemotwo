@@ -1,5 +1,6 @@
 <?php
 global $post, $gateway, $wpdb, $besecure, $discount_code, $discount_code_id, $pmpro_level, $pmpro_levels, $pmpro_msg, $pmpro_msgt, $pmpro_review, $skip_account_fields, $pmpro_paypal_token, $pmpro_show_discount_code, $pmpro_error_fields, $pmpro_required_billing_fields, $pmpro_required_user_fields, $wp_version, $current_user;
+ 
 
 // we are on the checkout page
 add_filter( 'pmpro_is_checkout', '__return_true' );
@@ -579,7 +580,16 @@ if ( ! empty( $pmpro_confirmed ) ) {
 		$user_id = $current_user->ID;
 	}
 
-	if ( ! empty( $user_id ) && ! is_wp_error( $user_id ) ) {
+	$is_user_valid = ! empty( $user_id ) && ! is_wp_error( $user_id );
+	if( $is_user_valid ) {
+		// If we have a valid user, perform any necessary actions before the membership is given.
+		// Currently being used by Stripe and PayPal Standard to send users offsite to pay.
+		// May set $pmpro_msgt if there's an error sending them to offiste gateway.
+		do_action( 'pmpro_checkout_before_change_membership_level', $user_id, $morder );
+	}
+
+	// User is created and we are ready to give them a membership.
+	if ( $is_user_valid && 'pmpro_error' !== $pmpro_msgt ) {
 		do_action( 'pmpro_checkout_before_change_membership_level', $user_id, $morder );
 
 		//start date is NOW() but filterable below
@@ -857,71 +867,10 @@ if ( ! empty( $AccountNumber ) && strpos( $AccountNumber, "XXXX" ) === 0 ) {
 	$AccountNumber = "";
 }
 
-
 /**
  * Hook to run actions after the checkout preheader is loaded.
  * @since 2.1
  */
 do_action( 'pmpro_after_checkout_preheader', $morder );
-
-
-function check_User_logged_in(){
-   global $session,$logeedin_user_id;
-    // echo"Hi";
-    if(is_user_logged_in())
-    {
-        echo'Welcome you are logged in';
-        echo'<br/>';
-        $session = wp_get_session_token();
-        // echo $session;
-        // echo'<br/>';
-    }
-    else{
-        echo"you are logged out!";
-    }
-    if(isset($session))
-    {
-         $logeedin_user_id = get_current_user_id();
-            //echo $logeedin_user_id;
-              $users = get_users( array( 'fields' => array( 'ID' ) ) );
-    // echo'Customer Details';
-    // echo'<br/>';
-    foreach($users as $user){
-        // echo'<pre>';
-        // print_r(get_user_meta ( $user->ID));
-        
-       $id =$user->ID;
-         $values = (get_user_meta ( $user->ID));
-         $details[$i]=Array(
-             'userid'=>$id,
-             'nickname'=>$values[nickname][0],
-            'first_name'=>$values[first_name][0],
-             'last_name'=>$values[last_name][0],
-             'description'=>$values[description][0],
-             'rich_editing'=>$values[rich_editing][0],
-             'syntax_highlighting'=>$values[syntax_highlighting][0],
-             'comment_shortcuts'=>$values[comment_shortcuts][0],
-            'admin_color'=>$values[admin_color][0],
-            'use_ssl'=>$values[use_ssl][0],
-            'show_admin_bar_front'=>$values[show_admin_bar_front][0],
-            'locale'=>$values[locale][0],
-            'wp_fdemo_user_level'=>$values[wp_fdemo_user_level][0],
-            'wp_fdemo_capabilities'=>$values[wp_fdemo_capabilities][0],
-             'foxycart_customer_id'=>$values[foxycart_customer_id][0]
-            
-            );
-         $i++;
-    }
-    // echo'<pre>';
-    // print_r($details);
-    // return $details;
-    $Customer_details=json_encode($details,JSON_PRETTY_PRINT);
-
-    }
-}
-$checkUser = check_User_logged_in();
-//Fetch session id and user id and check login and details hook
-do_action('pmp_checkout_user',$checkUser);
-
 
 
