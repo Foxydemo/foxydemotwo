@@ -453,6 +453,8 @@ function pmpro_membership_history_profile_fields( $user ) {
 					<th><?php esc_html_e( 'Total Billed', 'paid-memberships-pro' ); ?></th>
 					<th><?php esc_html_e( 'Discount Code', 'paid-memberships-pro' ); ?></th>
 					<th><?php esc_html_e( 'Status', 'paid-memberships-pro' ); ?></th>
+					<th><?php esc_html_e( 'Membership Status', 'paid-memberships-pro' ); ?></th>
+					<th><?php esc_html_e( 'Order Cancel', 'paid-memberships-pro' ); ?></th>  <!-- Custom Code -->
 					<?php do_action('pmpromh_orders_extra_cols_header');?>
 				</tr>
 			</thead>
@@ -501,6 +503,51 @@ function pmpro_membership_history_profile_fields( $user ) {
 								}
 							?>
 						</td>
+						<!-- Custom Code -->
+						<td> 
+							<?php		
+								$mem_status = $wpdb->get_results("SELECT * FROM $wpdb->pmpro_memberships_users WHERE user_id = '$user->ID' AND membership_id = '$level->id'");
+								$mem_stat = $mem_status[0]->status;
+								echo ($mem_stat);
+							?>	
+						</td>
+
+						<?php
+							if($mem_stat=='expired'){
+						?>
+							<td> 
+							<p> Subscription Cancelled </p>
+							</td>
+						<?php } else { ?>
+							<td>
+								<button id = "cancel" data-name = "<?php echo $level->name; ?>" data-id = "<?php echo $level->id; ?>" data-uid = "<?php echo $user->ID; ?>" >Cancel Order</button> 
+							</td>
+						<?php } ?>
+
+							<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+							<script>
+								$(document).ready(function(){  
+								$("#cancel").click(function(){
+								var name = $(this).attr('data-name');
+								var id = $(this).attr('data-id'); 
+								var uid = $(this).attr('data-uid');
+								var result = confirm("Do you wish to cancel this subscription?");
+									if(result){
+										$.ajax({
+											type: "POST",
+											url: "<?php echo plugin_dir_url( __FILE__ ) ?>function.php",
+											data:{action:"cancel", name:name, id:id, uid:uid},
+											success: function(data) {
+												alert(data);
+											}
+										});
+									}
+								})
+							});
+							</script>
+						
+							<!-- Custom Code-->
+
 						<?php do_action( 'pmpromh_orders_extra_cols_body', $invoice ); ?>
 					</tr>
 					<?php
@@ -539,6 +586,7 @@ function pmpro_membership_history_profile_fields( $user ) {
 					<th><?php esc_html_e( 'End Date', 'paid-memberships-pro' ); ?></th>
 					<th><?php esc_html_e( 'Level Cost', 'paid-memberships-pro' ); ?></th>
 					<th><?php esc_html_e( 'Status', 'paid-memberships-pro' ); ?></th>
+					<th><?php esc_html_e( 'Order Cancel', 'paid-memberships-pro' ); ?></th>  
 					<?php do_action( 'pmpromh_member_history_extra_cols_header' ); ?>
 				</tr>
 			</thead>
@@ -961,3 +1009,4 @@ function pmpro_change_password_form() {
 	</div> <!-- end pmpro_change_password_wrap -->
 	<?php
 }
+?>

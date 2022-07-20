@@ -35,6 +35,7 @@ if ( empty( $default_gateway ) ) {
 <?php do_action('pmpro_checkout_before_form'); ?>
 
 
+
 <div id="pmpro_level-<?php echo $pmpro_level->id; ?>" class="<?php echo pmpro_get_element_class( $pmpro_checkout_gateway_class, 'pmpro_level-' . $pmpro_level->id ); ?>">
 <form id="pmpro_form" class="<?php echo pmpro_get_element_class( 'pmpro_form' ); ?>" action="<?php if(!empty($_REQUEST['review'])) echo pmpro_url("checkout", "?level=" . $pmpro_level->id); ?>" method="post">
 
@@ -184,7 +185,197 @@ if ( empty( $default_gateway ) ) {
 		<div id="pmpro_account_loggedin" class="<?php echo pmpro_get_element_class( 'pmpro_message pmpro_alert', 'pmpro_account_loggedin' ); ?>">
 			<?php printf(__('You are logged in as <strong>%s</strong>. If you would like to use a different account for this membership, <a href="%s">log out now</a>.', 'paid-memberships-pro' ), $current_user->user_login, wp_logout_url($_SERVER['REQUEST_URI'])); ?>
 		</div> <!-- end pmpro_account_loggedin -->
+		
 	<?php } ?>
+<?php 
+global $wpdb;
+		
+$level=''; 
+if(isset($_GET['level'])){
+	$level = $_GET['level']; 
+} 
+$level_details = $wpdb->get_results("SELECT * FROM wp_fdemo_pmpro_membership_levels WHERE id = '$level'");
+if(!empty($level_details)){
+$levels = $level_details[0];
+$id= $level_details[0]->id;
+$name= $level_details[0]->name;
+$description= $level_details[0]->description;
+$confirmation= $level_details[0]->confirmation;
+$initial_payment= $level_details[0]->initial_payment;
+$billing_amount= $level_details[0]->billing_amount;
+$cycle_number= $level_details[0]->cycle_number;
+$cycle_period= $level_details[0]->cycle_period;
+$billing_limit= $level_details[0]->billing_limit;
+$trial_amount= $level_details[0]->trial_amount;
+$trial_limit= $level_details[0]->trial_limit;
+$allow_signups= $level_details[0]->allow_signups;
+$expiration_number= $level_details[0]->expiration_number;
+$expiration_period= $level_details[0]->expiration_period;
+$code= $level_details[0]->code;
+$frequency= $level_details[0]->frequency;
+$start_date= $level_details[0]->start_date;
+$end_date= $level_details[0]->end_date;
+}
+
+?>
+
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <style>
+
+  </style>
+</head>
+<div class="container">
+  
+  <!-- Trigger the modal with a button -->
+  <form action=" " method='POST'>
+	<button id="Inbutton">+</button>
+
+  <input type='text'  value='1' name='PQuntity' id='PQuantity' style=" text-align: center;width:100px">
+  <button id="DeButton">-</button>
+  <input type="hidden"id="PAmount" name="price" value="<?php echo $billing_amount; ?>"/>
+      
+      
+        <input type="hidden" name="image" value="https://foxyshopdemotwo.kodetiger.in/wp-content/uploads/2022/03/51PpSVije-L-150x150.jpg" id="foxyshop_cart_product_image_<?php echo $code; ?>">
+        <input type="hidden" name="url" value="https://foxyshopdemotwo.kodetiger.in/products/laddu/" id="fs_url_<?php echo $code; ?>">
+ 
+       
+       
+        <input type="hidden" name="sub_frequency" id='PFrequency'  value="<?php echo $frequency; ?>" />
+        <input type="hidden"  id="PName" name="name" id="fs_name" value="<?php echo $name; ?>" />
+        <input type="hidden" name="code" id="PCode" value="<?php echo $code; ?>"/>
+        <input type="hidden" name="weight" id="fs_weight_<?php echo $code; ?>" value="1.0">
+       <input type="hidden" name="sub_startdate"  id='PStartDate' value="<?php echo $start_date; ?>" />
+        <input type="hidden" name="sub_enddate" id='PEndDate' value="<?php echo $end_date; ?>"/>
+ 
+
+  <button type="button" class="btn btn-info btn-lg"  id="AddCart" data-toggle="modal" data-target="#myModal">Add to Cart</button>
+  </form>
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h2 class="modal-title text-center">Your Cart</h2>
+		 
+
+        </div>
+        <div class="modal-body">
+
+    
+<div class='row' id='ShowCart'>
+
+
+</div>
+
+			<h3 class="text-center" >Order Summary</h3>
+		
+			<table>
+  <tr>
+  
+    <th id='ordertotal'></th>
+    <th id=amounttotal></th>
+  </tr>
+  
+</table>
+
+
+</div>
+
+
+
+
+
+	
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Proceed to checkout</button>  <!-- add link to this button for redirecting -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+$('#AddCart').click((e)=>{
+	e.preventDefault();
+	var PQuantity=$('#PQuantity').val();
+	var PName=$('#PName').val();
+	var PAmount=$('#PAmount').val();
+	var PCode=$('#PCode').val();
+
+	var PFrequency=$('#PFrequency').val();
+	var PStartDate=$('#PStartDate').val();
+	var PEndDate=$('#PEndDate').val();
+	
+
+	$.ajax({
+		url: "<?php echo plugin_dir_url( __FILE__ ) ?>insertcarts.php",
+        type: "POST",
+        data: {PQuantity:PQuantity,PName:PName,PAmount:PAmount,PCode:PCode,PFrequency:PFrequency,PStartDate:PStartDate,PEndDate},
+        success: function (response) {
+			$('#ShowCart').html(response)
+			
+			$('#ordertotal').text( 'Total Order : ' + $('#quantity').val());
+			$('#amounttotal').text( '$  ' + $('#totalPrice').val())
+		
+			
+
+
+
+	
+
+
+
+
+        }
+   
+    });
+})
+function delFunction(e) {
+	let  PCode=$('.pdel').val();
+	$.ajax({
+		url: "<?php echo plugin_dir_url( __FILE__ ) ?>insertcarts.php",
+        type: "POST",
+        data: {PCode:PCode,PDel:'PDel'},
+        success: function (response) {
+			console.log(response)
+		
+			
+
+
+
+	
+
+
+
+
+        }
+   
+    });
+}
+$('#Inbutton').click((e)=>{
+	e.preventDefault();
+	
+	let incre=$('#PQuantity').val();
+	incre++;
+	$('#PQuantity').val(incre);
+})
+$('#DeButton').click((e)=>{
+	e.preventDefault();
+	let dece=$('#PQuantity').val();
+	if(dece > 1){
+	
+	dece--;
+	$('#PQuantity').val(dece);
+	}
+})
+</script>
+
 
 	<?php
 		do_action('pmpro_checkout_after_user_fields');
@@ -306,7 +497,10 @@ if ( empty( $default_gateway ) ) {
 		}
 	
 		?>
-		<form action="https://foxydemo.foxycart.com/cart" method="post" accept-charset="utf-8" class="foxyshop_product" id="foxyshop_product_form_<?php echo $code; ?>" rel="<?php echo $code; ?>">
+ 
+ 
+
+		<form action="" method="post" accept-charset="utf-8" class="foxyshop_product" id="foxyshop_product_form_<?php echo $code; ?>" rel="<?php echo $code; ?>">
         <input type="hidden" name="fcsid" value="brenm3nsefjk4hfd75ujcplab1">
         <input type="hidden" name="price" id="fs_price_<?php echo $code; ?>" value="<?php echo $billing_amount; ?>"/>
         <input type="hidden" name="x:originalprice" id="originalprice_<?php echo $code; ?>" value="<?php echo $billing_amount; ?>" />
@@ -322,9 +516,10 @@ if ( empty( $default_gateway ) ) {
         <input type="hidden" name="weight" id="fs_weight_<?php echo $code; ?>" value="1.0">
        <input type="hidden" name="sub_startdate" id="fs_sub_startdate_<?php echo $code; ?>" value="<?php echo $start_date; ?>" />
         <input type="hidden" name="sub_enddate" id="fs_sub_enddate_<?php echo $code; ?>" value="<?php echo $end_date; ?>" />
-        
-    <input type="submit" value="Add to cart!" />
+     
+    <input type="submit" value="Add to cart!" name='cart-submit' />
 </form>
+
 	<!-- Custom Code ends here -->
 <?php do_action('pmpro_checkout_after_form'); ?>
 

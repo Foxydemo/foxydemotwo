@@ -789,7 +789,7 @@ endif;
 				<p><?php _e( 'Your website appears to use Basic Authentication, which is not currently compatible with Application Passwords.' ); ?></p>
 			</div>
 		<?php } ?>
-
+		
 		<div class="application-passwords-list-table-wrapper">
 			<?php
 			$application_passwords_list_table = _get_list_table( 'WP_Application_Passwords_List_Table', array( 'screen' => 'application-passwords-user' ) );
@@ -833,6 +833,7 @@ endif;
 			 * @param WP_User $profileuser The current WP_User object.
 			 */
 			do_action( 'edit_user_profile', $profileuser );
+			
 		}
 		?>
 
